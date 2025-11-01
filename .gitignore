@@ -1,0 +1,11 @@
+*.obj
+*.os
+*.o
+*.glb
+*.gltf
+~*
+*.tmp
+
+note.txt
+
+.sconsign.dblite

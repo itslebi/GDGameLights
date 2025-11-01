@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmwtbvjhxl7ab"]
+
+[ext_resource type="Script" uid="uid://bwh7m08uqwj8l" path="res://control.gd" id="1_0fbet"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0fbet")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 478.0
+offset_top = 192.0
+offset_right = 579.0
+offset_bottom = 223.0
+text = "Make it red!"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 443.0
+offset_top = 271.0
+offset_right = 635.0
+offset_bottom = 302.0
+text = "Animate it Pulsing Blue!"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 431.0
+offset_top = 117.0
+offset_right = 657.0
+offset_bottom = 140.0
+text = "Your Lights should be Yellow!"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
