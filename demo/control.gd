@@ -9,6 +9,7 @@ var blue_intensity: float = 0.0
 
 func _ready() -> void:
 	lights.connect_to_openrgb("127.0.0.1", 6742)
+	lights.set_all_devices_to_direct_mode()
 	lights.set_all_devices_color(Color(1, 1, 0))
 
 func _on_button_pressed() -> void:
@@ -17,7 +18,7 @@ func _on_button_pressed() -> void:
 	if tween:
 		tween.kill()
 		tween = null
-	lights.set_all_devices_color(Color(1, 0, 0))  # immediate red
+	lights.set_all_devices_color(Color(1, 0, 0))
 
 func _on_button_2_pressed() -> void:
 	pulsing = not pulsing

@@ -5,6 +5,10 @@ if not ARGUMENTS.get("target"):
 
 env = SConscript("godot-cpp/SConstruct")
 
+# --- Set Flag for editor mode
+if ARGUMENTS["target"] == "template_debug":
+    env.Append(CPPDEFINES=['IN_EDITOR'])
+
 # --- Compiler-specific flags ---
 if env["CC"] == "cl" or env["CXX"] == "cl":
     env.Append(CXXFLAGS=["/EHsc"])  # enable exceptions for MSVC
@@ -35,8 +39,8 @@ elif is_linux:
 # --- Include paths ---
 env.Append(CPPPATH=[
     "src/",
-    "include",
-    "openRGB",
+    "include/",
+    "openRGB/",
     "openRGB/include",
     "openRGB/src",
     "openRGB/external",
@@ -54,6 +58,14 @@ sources = (
     Glob("openRGB/external/CppUtils-Essential/*.cpp") +
     Glob("openRGB/external/CppUtils-Network/*.cpp")
 )
+
+# --- Documentation
+if env["target"] in ["editor", "template_debug"]:
+    try:
+        doc_data = env.GodotCPPDocData("godot-cpp/gen/doc_data.gen.cpp", source=Glob("doc_classes/*.xml"))
+        sources.append(doc_data)
+    except AttributeError:
+        print("Not including class reference as we're targeting a pre-4.3 baseline.")
 
 # --- Build shared library ---
 library = env.SharedLibrary(

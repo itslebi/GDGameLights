@@ -6,6 +6,9 @@
 #include <godot_cpp/variant/color.hpp>
 
 #include <include/OpenRGB/Client.hpp>
+#include <include/OpenRGB/DeviceInfo.hpp>
+
+#include <declarations.hpp>
 
 namespace godot {
 
@@ -23,11 +26,18 @@ class GDGameLights : public RefCounted {
         GDGameLights();
         ~GDGameLights();
 
-        void connect_to_openrgb(String host = "localhost", int port = 6742);
-        void set_all_devices_color(Color color);
-        void disconnect();
-    };
+        //Connect to the openrgb server sdk
+        void connect_to_openrgb(String host = "localhost", int port = 6742) noexcept;
 
-}
+        //Set the color of the light of all supported devices to color passed
+        void set_all_devices_color(Color color) noexcept;
+
+        //Set the mode of all supported devices to color passed
+        void set_all_devices_to_direct_mode() noexcept;
+
+        //Disconnect from the openrgb server sdk
+        void disconnect() noexcept;
+    };
+} //namespace godot
 
 #endif // GD_GAMELIGHTS_HPP

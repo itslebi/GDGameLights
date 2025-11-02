@@ -1,7 +1,5 @@
 #include "GDGameLights.hpp"
 
-#include <godot_cpp/variant/utility_functions.hpp>
-
 using namespace godot;
 
 GDGameLights::GDGameLights() {}
@@ -10,28 +8,32 @@ GDGameLights::~GDGameLights() {
     disconnect();
 }
 
+// ----------- Bind Methods to be used inside GDScript
 void GDGameLights::_bind_methods() {
     ClassDB::bind_method(D_METHOD("connect_to_openrgb", "host", "port"),
                          &GDGameLights::connect_to_openrgb, DEFVAL("localhost"), DEFVAL(6742));
     ClassDB::bind_method(D_METHOD("set_all_devices_color", "color"),
                          &GDGameLights::set_all_devices_color);
+    ClassDB::bind_method(D_METHOD("set_all_devices_to_direct_mode"),
+                         &GDGameLights::set_all_devices_to_direct_mode);
     ClassDB::bind_method(D_METHOD("disconnect"),
                          &GDGameLights::disconnect);
 }
 
-void GDGameLights::connect_to_openrgb(String host, int port) {
+// ----------- Methods
+void GDGameLights::connect_to_openrgb(String host, int port) noexcept {
     if (connected) {
-        UtilityFunctions::print("Already connected to OpenRGB.");
+        gdgamelights::log_info("Already connected to OpenRGB.");
         return;
     }
 
-    UtilityFunctions::print("Connecting to OpenRGB at host: " + host + ", port: " + String::num_int64(port));
+    gdgamelights::log_info("Connecting to OpenRGB at host: " + host + ", port: " + String::num_int64(port));
 
     client = memnew(orgb::Client());
     client->connect(host.utf8().get_data(), port);
 
     if (!client->isConnected()) {
-        UtilityFunctions::printerr("Failed to connect to OpenRGB at " + host + ":" + String::num_int64(port));
+        gdgamelights::log_error("Failed to connect to OpenRGB at " + host + ":" + String::num_int64(port));
         memdelete(client);
         client = nullptr;
         connected = false;
@@ -39,12 +41,12 @@ void GDGameLights::connect_to_openrgb(String host, int port) {
     }
 
     connected = true;
-    UtilityFunctions::print("Connected to OpenRGB server at " + host + ":" + String::num_int64(port));
+    gdgamelights::log_info("Connected to OpenRGB server at " + host + ":" + String::num_int64(port));
 }
 
-void GDGameLights::set_all_devices_color(Color color) {
+void GDGameLights::set_all_devices_color(Color color) noexcept {
     if (!connected || !client) {
-        UtilityFunctions::printerr("Not connected to OpenRGB server!");
+        gdgamelights::log_error("Not connected to OpenRGB server!");
         return;
     }
 
@@ -55,11 +57,10 @@ void GDGameLights::set_all_devices_color(Color color) {
         static_cast<uint8_t>(color.b * 255)
     };
 
-    // Get all devices
     orgb::DeviceListResult deviceList = client->requestDeviceList();
 
     if (deviceList.status != orgb::RequestStatus::Success) {
-        UtilityFunctions::printerr("Failed to get device list from OpenRGB.");
+        gdgamelights::log_error("Failed to get device list from OpenRGB.");
         return;
     }
 
@@ -67,20 +68,69 @@ void GDGameLights::set_all_devices_color(Color color) {
     for (const auto &device : deviceList.devices) {
         orgb::RequestStatus status = client->setDeviceColor(device, col);
         if (status != orgb::RequestStatus::Success) {
-            UtilityFunctions::printerr(
-                godot::String("Failed to set color for device: ") + godot::String(device.name.c_str())
-            );
+            gdgamelights::log_error("Failed to set color for device: " + godot::String(device.name.c_str()));
         }
     }
 
-    UtilityFunctions::print("Set all devices to color (", (int)col.r, ", ", (int)col.g, ", ", (int)col.b, ")");
+    gdgamelights::log_info("Set all devices to color (" + String::num_int64((int)col.r) + ", " + String::num_int64((int)col.g) + ", " + String::num_int64((int)col.b) + ")");
 }
 
-void GDGameLights::disconnect() {
+void GDGameLights::set_all_devices_to_direct_mode() noexcept {
+    if (!connected || !client) {
+        gdgamelights::log_error("Not connected to OpenRGB server!");
+        return;
+    }
+
+    orgb::DeviceListResult deviceList = client->requestDeviceList();
+
+    if (deviceList.status != orgb::RequestStatus::Success) {
+        gdgamelights::log_error("Failed to get device list from OpenRGB.");
+        return;
+    }
+
+    for (auto &device : deviceList.devices) {
+        if (device.modes.empty()) {
+            gdgamelights::log_info("Device " + godot::String(device.name.c_str()) + " has no modes. Skipping.");
+            continue;
+        }
+
+        orgb::Mode *modeToUse = nullptr;
+        orgb::Mode *fallbackMode = nullptr;
+
+        // Find the mode
+        for (auto &mode : device.modes) {
+            if (mode.name == "Direct") {
+                orgb::Mode modeCopy = mode;
+                modeToUse = &modeCopy;
+                break;
+            }
+            if (!fallbackMode && mode.name != "Off") {
+                orgb::Mode modeCopy = mode;
+                fallbackMode = &modeCopy;
+            }
+        }
+
+        if (!modeToUse) { // Use fallback
+            modeToUse = fallbackMode;
+        }
+
+        // Attempt to change the mode
+        orgb::RequestStatus status = client->changeMode(device, *modeToUse);
+        if (status != orgb::RequestStatus::Success) {
+            gdgamelights::log_error("Failed to set mode for device: " + String(device.name.c_str()));
+        } else {
+            gdgamelights::log_info("Device " + String(device.name.c_str()) + " mode set to" + String(modeToUse->name.c_str()));
+        }
+    }
+}
+
+
+
+void GDGameLights::disconnect() noexcept {
     if (client) {
         if (connected) {
             client->disconnect();
-            UtilityFunctions::print("Disconnected from OpenRGB.");
+            gdgamelights::log_info("Disconnected from OpenRGB.");
         }
 
         memdelete(client);
