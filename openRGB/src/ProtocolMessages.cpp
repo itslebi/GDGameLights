@@ -313,14 +313,30 @@ void ResizeZone::serialize( BinaryOutputStream & stream, uint32_t /*protocolVers
 {
 	header.serialize( stream );
 
+	/* Original code
 	stream << zone_idx;
-	stream << new_size;
+	stream << new_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(zone_idx);
+	stream.writeLittleEndian(new_size);
+	//end patch
 }
 
 bool ResizeZone::deserializeBody( BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
+	/* Original code
 	stream >> zone_idx;
-	stream >> new_size;
+	stream >> new_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(zone_idx);
+	stream.readLittleEndian(new_size);
+	//end patch
 
 	return !stream.failed();
 }
@@ -341,13 +357,27 @@ void UpdateLEDs::serialize( BinaryOutputStream & stream, uint32_t /*protocolVers
 {
 	header.serialize( stream );
 
-	stream << data_size;
+	/* Original code
+	stream << data_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(data_size);
+	//end patch
 	protocol::writeArray( stream, colors );
 }
 
 bool UpdateLEDs::deserializeBody( BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
-	stream >> data_size;
+	/* Original code
+	stream >> data_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(data_size);
+	//end patch
 	protocol::readArray( stream, colors );
 
 	return !stream.failed();
@@ -370,15 +400,31 @@ void UpdateZoneLEDs::serialize( BinaryOutputStream & stream, uint32_t /*protocol
 {
 	header.serialize( stream );
 
+	/* Original code
 	stream << data_size;
-	stream << zone_idx;
+	stream << zone_idx;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(data_size);
+	stream.writeLittleEndian(zone_idx);
+	//end patch
 	protocol::writeArray( stream, colors );
 }
 
 bool UpdateZoneLEDs::deserializeBody( BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
+	/* Original code
 	stream >> data_size;
-	stream >> zone_idx;
+	stream >> zone_idx;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(data_size);
+	stream.readLittleEndian(zone_idx);
+	//end patch
 	protocol::readArray( stream, colors );
 
 	return !stream.failed();
@@ -400,14 +446,30 @@ void UpdateSingleLED::serialize( BinaryOutputStream & stream, uint32_t /*protoco
 {
 	header.serialize( stream );
 
+	/* Original code
 	stream << led_idx;
-	stream << color;
+	stream << color;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(led_idx);
+    stream.writeRaw(color);
+	//end patch
 }
 
 bool UpdateSingleLED::deserializeBody( BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
+	/* Original code
 	stream >> led_idx;
-	stream >> color;
+	stream >> color;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(led_idx);
+    stream.readRaw(color);
+	//end patch
 
 	return !stream.failed();
 }
@@ -429,15 +491,31 @@ void UpdateMode::serialize( BinaryOutputStream & stream, uint32_t protocolVersio
 {
 	header.serialize( stream );
 
+	/* Original code
 	stream << data_size;
-	stream << mode_idx;
+	stream << mode_idx;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(data_size);
+	stream.writeLittleEndian(mode_idx);
+	//end patch
 	mode_desc.serialize( stream, protocolVersion );
 }
 
 bool UpdateMode::deserializeBody( BinaryInputStream & stream, uint32_t protocolVersion ) noexcept
 {
+	/* Original code
 	stream >> data_size;
-	stream >> mode_idx;
+	stream >> mode_idx;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(data_size);
+	stream.readLittleEndian(mode_idx);
+	//end patch
 	mode_desc.deserialize( stream, mode_idx, header.device_idx, protocolVersion );
 
 	return !stream.failed();
@@ -461,15 +539,31 @@ void SaveMode::serialize( BinaryOutputStream & stream, uint32_t protocolVersion 
 {
 	header.serialize( stream );
 
+	/* Original code
 	stream << data_size;
-	stream << mode_idx;
+	stream << mode_idx;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(data_size);
+	stream.writeLittleEndian(mode_idx);
+	//end patch
 	mode_desc.serialize( stream, protocolVersion );
 }
 
 bool SaveMode::deserializeBody( BinaryInputStream & stream, uint32_t protocolVersion ) noexcept
 {
+	/* Original code
 	stream >> data_size;
-	stream >> mode_idx;
+	stream >> mode_idx;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(data_size);
+	stream.readLittleEndian(mode_idx);
+	//end patch
 	mode_desc.deserialize( stream, mode_idx, header.device_idx, protocolVersion );
 
 	return !stream.failed();
@@ -496,6 +590,7 @@ void ReplyProfileList::serialize( own::BinaryOutputStream & stream, uint32_t /*p
 {
 	header.serialize( stream );
 
+	/* Original code
 	stream << data_size;
 	// Unfortunatelly, these strings break the consistency with the rest by not including the '\0' so it must be written manually.
 	stream << uint16_t( profiles.size() );
@@ -503,12 +598,34 @@ void ReplyProfileList::serialize( own::BinaryOutputStream & stream, uint32_t /*p
 	{
 		stream << uint16_t( profile.size() );
 		stream.writeString( profile );
-	}
+	}*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+    stream.writeLittleEndian(data_size);
+
+    const uint16_t profileCount = static_cast<uint16_t>(profiles.size());
+    stream.writeLittleEndian(profileCount);
+    for (const auto & profile : profiles)
+    {
+        const uint16_t length = static_cast<uint16_t>(profile.size());
+        stream.writeLittleEndian(length);   // write string length (no '\0')
+        stream.writeString(profile);        // write string content only
+    }
+	//end patch
 }
 
 bool ReplyProfileList::deserializeBody( own::BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
-	stream >> data_size;
+	/* Original code
+	stream >> data_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(data_size);
+	//end patch
 	protocol::readArray( stream, profiles );
 
 	return !stream.failed();

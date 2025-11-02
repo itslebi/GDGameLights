@@ -43,14 +43,29 @@ struct protocol
 
 	static void writeString( own::BinaryOutputStream & stream, const std::string & str )
 	{
-		stream << uint16_t( str.size() + 1 );
+		/* Original code
+		stream << uint16_t( str.size() + 1 );*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		const uint16_t size = static_cast<uint16_t>(str.size() + 1);
+    	stream.writeLittleEndian(size);
+		//end patch
 		stream.writeString0( str );
 	}
 
 	static bool readString( own::BinaryInputStream & stream, std::string & str ) noexcept
 	{
 		uint16_t size = 0;
-		stream >> size;
+		/* Original code
+		stream >> size;*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		stream.readLittleEndian(size);
+		//end patch
 		stream.readString( str, size > 0 ? size - 1 : 0 );  // don't rely on the '\0' terminator, read by the size
 		stream.skip(1);  // move reading pointer past the expected '\0'
 		return !stream.failed() && strlen( str.c_str() ) + 1 == size;
@@ -100,16 +115,33 @@ struct protocol
 	template< typename Type, REQUIRES( std::is_trivial<Type>::value ) >
 	static void writeArray( own::BinaryOutputStream & stream, const std::vector< Type > & vec )
 	{
+		/* Original code
 		stream << uint16_t(vec.size());
 		for (const auto & elem : vec)
 		{
 			stream << elem;
-		}
+		}*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		const uint16_t size = static_cast<uint16_t>(vec.size());
+		stream.writeLittleEndian(size);
+		stream.writeTrivialArray(vec);
+		//end patch
 	}
 
 	static void writeArray( own::BinaryOutputStream & stream, const std::vector< std::string > & vec )
 	{
-		stream << uint16_t(vec.size());
+		/* Original code
+		stream << uint16_t(vec.size());*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		const uint16_t size = static_cast<uint16_t>(vec.size());
+    	stream.writeLittleEndian(size);
+		//end patch
 		for (const auto & elem : vec)
 		{
 			writeString( stream, elem );
@@ -119,7 +151,15 @@ struct protocol
 	template< typename Type, REQUIRES( !std::is_trivial<Type>::value ) >
 	static void writeArray( own::BinaryOutputStream & stream, const std::vector< Type > & vec, uint32_t protocolVersion )
 	{
-		stream << uint16_t(vec.size());
+		/* Original code
+		stream << uint16_t(vec.size());*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		const uint16_t size = static_cast<uint16_t>(vec.size());
+    	stream.writeLittleEndian(size);
+		//end patch
 		for (const auto & elem : vec)
 		{
 			elem.serialize( stream, protocolVersion );
@@ -130,6 +170,7 @@ struct protocol
 	static bool readArray( own::BinaryInputStream & stream, std::vector< Type > & vec ) noexcept
 	{
 		uint16_t size = 0;
+		/* Original code
 		stream >> size;
 		vec.resize( size );
 		for (uint16_t i = 0; i < size; ++i)
@@ -137,14 +178,33 @@ struct protocol
 			stream >> vec[i];
 			if (stream.failed())
 				return false;
+		}*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		stream.readLittleEndian(size);
+
+		vec.resize(size);
+		if (size > 0) {
+			stream.readTrivialArray(vec);
 		}
+		//end patch
+
 		return !stream.failed();
 	}
 
 	static bool readArray( own::BinaryInputStream & stream, std::vector< std::string > & vec ) noexcept
 	{
 		uint16_t size = 0;
-		stream >> size;
+		/* Original code
+		stream >> size;*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		stream.readLittleEndian(size);
+		//end patch
 		vec.resize( size );
 		for (uint16_t i = 0; i < size; ++i)
 		{
@@ -159,7 +219,14 @@ struct protocol
 	static bool readArray( own::BinaryInputStream & stream, std::vector< Type > & vec, uint32_t protocolVersion, uint32_t parentIdx ) noexcept
 	{
 		uint16_t size = 0;
-		stream >> size;
+		/* Original code
+		stream >> size;*/
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		stream.readLittleEndian(size);
+		//end patch
 		vec.reserve( size );
 		for (uint16_t i = 0; i < size; ++i)
 		{

@@ -1,6 +1,6 @@
 # GDGamepadLights
 
-Several patches where made to openRGB. Files [ProtocolCommon.hpp](openRGB/src/ProtocolCommon.hpp), [DeviceInfo.cpp](openRGB/src/DeviceInfo.cpp), [ProtocolMessages.cpp](openRGB/src/ProtocolMessages.cpp) and [NetAddress.cpp](openRGB/external/CppUtils-Network/NetAddress.cpp) where updated to use the new BinaryStream.hpp from the extarnal libraries required. Patches are identified with comments. The line ```env.Append(CPPDEFINES=[('critical_error', 'CRITICAL_ERROR')])``` was added to the SConstruct file so that the calls to critical_error can remain the same as in the old version of the CppUtils-Essential library.
+Several patches where made to openRGB. Files [ProtocolCommon.hpp](openRGB/src/ProtocolCommon.hpp), [DeviceInfo.cpp](openRGB/src/DeviceInfo.cpp), [ProtocolMessages.cpp](openRGB/src/ProtocolMessages.cpp) and [NetAddress.cpp](openRGB/external/CppUtils-Network/NetAddress.cpp) where updated to use the new [BinaryStream.hpp](openRGB/external/CppUtils-Essential/BinaryStream.hpp) from the extarnal libraries required. Patches are identified with comments. The line ```env.Append(CPPDEFINES=[('critical_error', 'CRITICAL_ERROR')])``` was added to the SConstruct file so that the calls to critical_error can remain the same as in the old version of the CppUtils-Essential library.
 Using https://github.com/Youda008/OpenRGB-cppSDK
 
 https://github.com/Youda008/CppUtils-Essential/commit/691850a7c5274870f839b69017896190f4287231
