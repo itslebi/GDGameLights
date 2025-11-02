@@ -255,7 +255,15 @@ bool sockaddrToEndpoint( const struct sockaddr * saddr, Endpoint & ep ) noexcept
 		auto saddr4 = reinterpret_cast< const struct sockaddr_in * >( saddr );
 		uint8_t bytes [4];
 		priv::sysAddrToOwnAddrV4( &saddr4->sin_addr, bytes );
-		ep.addr = IPAddr( make_fixed_span( bytes ) );  // TODO: is it possible to get rid of the second copy?
+		/* Original Code
+		ep.addr = IPAddr( make_fixed_span( bytes ) );  // TODO: is it possible to get rid of the second copy? */
+
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		ep.addr = IPAddr( make_const_span( bytes ) ); 
+		//end patch
 		ep.port = ntohs( saddr4->sin_port );
 		return true;
 	}
@@ -264,7 +272,15 @@ bool sockaddrToEndpoint( const struct sockaddr * saddr, Endpoint & ep ) noexcept
 		auto saddr6 = reinterpret_cast< const struct sockaddr_in6 * >( saddr );
 		uint8_t bytes [16];
 		priv::sysAddrToOwnAddrV6( &saddr6->sin6_addr, bytes );
-		ep.addr = IPAddr( make_fixed_span( bytes ) );
+		/* Original Code
+		ep.addr = IPAddr( make_fixed_span( bytes ) ); */
+
+		// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+		// Patch License Info
+		// MIT License
+		// Copyright (c) 2025 itslebi
+		ep.addr = IPAddr( make_const_span( bytes ) ); 
+		//end patch
 		ep.port = ntohs( saddr6->sin6_port );
 		return true;
 	}

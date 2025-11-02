@@ -11,7 +11,12 @@
 
 #include <CppUtils-Essential/ContainerUtils.hpp>
 #include <CppUtils-Essential/BinaryStream.hpp>
-MAKE_LITTLE_ENDIAN_DEFAULT
+// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+// Patch License Info
+// MIT License
+// Copyright (c) 2025 itslebi
+//MAKE_LITTLE_ENDIAN_DEFAULT
+//end patch
 
 #include <cstring>
 #include <string>

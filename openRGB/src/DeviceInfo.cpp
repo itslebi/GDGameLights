@@ -222,8 +222,17 @@ size_t LED::calcSize( uint32_t /*protocolVersion*/ ) const noexcept
 
 void LED::serialize( BinaryOutputStream & stream, uint32_t /*protocolVersion*/ ) const
 {
+	/* Original Implementation
 	protocol::writeString( stream, name );
-	stream << value;
+	stream << value;*/
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	protocol::writeString( stream, name );          // keep existing string helper
+    stream.writeLittleEndian( value );              // replace '<< value'
+	//end patch
 }
 
 bool LED::deserialize( BinaryInputStream & stream, uint32_t /*protocolVersion*/, uint32_t idx, uint32_t parentIdx ) noexcept
@@ -235,8 +244,17 @@ bool LED::deserialize( BinaryInputStream & stream, uint32_t /*protocolVersion*/,
 	unconst( this->idx ) = idx;
 	unconst( this->parentIdx ) = parentIdx;
 
+	/* Original code
 	protocol::readString( stream, unconst( name ) );
-	stream >> unconst( value );
+	stream >> unconst( value ); */
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	protocol::readString(stream, unconst(name)); // read the string
+	stream.readLittleEndian(unconst(value)); // read the integer value
+	//end patch
 
 	return !stream.failed();
 }
@@ -292,6 +310,7 @@ size_t Zone::calcSize( uint32_t /*protocolVersion*/ ) const noexcept
 
 void Zone::serialize( BinaryOutputStream & stream, uint32_t /*protocolVersion*/ ) const
 {
+	/* Original code
 	protocol::writeString( stream, name );
 	stream << type;
 	stream << leds_min;
@@ -312,7 +331,39 @@ void Zone::serialize( BinaryOutputStream & stream, uint32_t /*protocolVersion*/ 
 		{
 			stream << val;
 		}
-	}
+	} */
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+    protocol::writeString(stream, name); // write the zone name
+
+    // write basic integer fields
+    stream.writeLittleEndian(type);
+    stream.writeLittleEndian(leds_min);
+    stream.writeLittleEndian(leds_max);
+    stream.writeLittleEndian(leds_count);
+
+    // compute length of optional matrix block
+    uint16_t matrix_length = uint16_t(
+        matrix_values.size() > 0
+            ? sizeof(matrix_height) + sizeof(matrix_width) + matrix_values.size() * sizeof(matrix_values[0])
+            : 0
+    );
+
+    stream.writeLittleEndian(matrix_length);
+
+    // write optional matrix block if it exists
+    if (matrix_length > 0)
+    {
+        stream.writeLittleEndian(matrix_height);
+        stream.writeLittleEndian(matrix_width);
+
+        // write matrix values as raw bytes
+        stream.writeTrivialArray(matrix_values);
+    }
+	//end patch
 }
 
 bool Zone::deserialize( BinaryInputStream & stream, uint32_t /*protocolVersion*/, uint32_t idx, uint32_t parentIdx ) noexcept
@@ -320,6 +371,7 @@ bool Zone::deserialize( BinaryInputStream & stream, uint32_t /*protocolVersion*/
 	// This hack with const casts allows us to restrict the user from changing attributes that are a static description
 	// and allow him to change only the parameters that are meant to be changed.
 
+	/* Original Implementation
 	// fill in our metadata
 	unconst( this->idx ) = idx;
 	unconst( this->parentIdx ) = parentIdx;
@@ -342,7 +394,41 @@ bool Zone::deserialize( BinaryInputStream & stream, uint32_t /*protocolVersion*/
 		{
 			stream >> unconst( matrix_values )[i];
 		}
-	}
+	} */
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	// fill in metadata (const_cast hack)
+    unconst(this->idx) = idx;
+    unconst(this->parentIdx) = parentIdx;
+
+    // read zone name
+    protocol::readString(stream, unconst(name));
+
+    // read integer fields
+    stream.readLittleEndian(unconst(type));
+    stream.readLittleEndian(unconst(leds_min));
+    stream.readLittleEndian(unconst(leds_max));
+    stream.readLittleEndian(unconst(leds_count));
+
+    // read optional matrix block length
+    uint16_t matrix_length = 0;
+    stream.readLittleEndian(matrix_length);
+
+    if (matrix_length > 0)
+    {
+        stream.readLittleEndian(unconst(matrix_height));
+        stream.readLittleEndian(unconst(matrix_width));
+
+        size_t matrixSize = matrix_height * matrix_width;
+        unconst(matrix_values).resize(matrixSize);
+
+        // read all matrix values as a contiguous array
+        stream.readResizableTrivialArray(unconst(matrix_values), matrixSize);
+    }
+	//end patch 
 
 	if (!isValidZoneType( type ))
 		stream.setFailed();
@@ -431,6 +517,7 @@ size_t Mode::calcSize( uint32_t protocolVersion ) const noexcept
 void Mode::serialize( BinaryOutputStream & stream, uint32_t protocolVersion ) const
 {
 	protocol::writeString( stream, name );
+	/* Original Implementation
 	stream << value;
 	stream << flags;
 	stream << speed_min;
@@ -449,6 +536,36 @@ void Mode::serialize( BinaryOutputStream & stream, uint32_t protocolVersion ) co
 	}
 	stream << direction;
 	stream << color_mode;
+	*/
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+    // write integer fields in little-endian
+    stream.writeLittleEndian(value);
+    stream.writeLittleEndian(flags);
+    stream.writeLittleEndian(speed_min);
+    stream.writeLittleEndian(speed_max);
+
+    if (protocolVersion >= 3)
+    {
+        stream.writeLittleEndian(brightness_min);
+        stream.writeLittleEndian(brightness_max);
+    }
+
+    stream.writeLittleEndian(colors_min);
+    stream.writeLittleEndian(colors_max);
+    stream.writeLittleEndian(speed);
+
+    if (protocolVersion >= 3)
+    {
+        stream.writeLittleEndian(brightness);
+    }
+
+    stream.writeLittleEndian(direction);
+    stream.writeLittleEndian(color_mode);
+	//end patch
 	protocol::writeArray( stream, colors );
 }
 
@@ -462,6 +579,7 @@ bool Mode::deserialize( BinaryInputStream & stream, uint32_t protocolVersion, ui
 	unconst( this->parentIdx ) = parentIdx;
 
 	protocol::readString( stream, unconst( name ) );
+	/* Original code
 	stream >> unconst( value );
 	stream >> unconst( flags );
 	stream >> unconst( speed_min );
@@ -479,7 +597,36 @@ bool Mode::deserialize( BinaryInputStream & stream, uint32_t protocolVersion, ui
 		stream >> unconst( brightness );
 	}
 	stream >> direction;
-	stream >> unconst( color_mode );
+	stream >> unconst( color_mode ); */
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+    // read integer fields in little-endian
+    stream.readLittleEndian(unconst(value));
+    stream.readLittleEndian(unconst(flags));
+    stream.readLittleEndian(unconst(speed_min));
+    stream.readLittleEndian(unconst(speed_max));
+
+    if (protocolVersion >= 3)
+    {
+        stream.readLittleEndian(unconst(brightness_min));
+        stream.readLittleEndian(unconst(brightness_max));
+    }
+
+    stream.readLittleEndian(unconst(colors_min));
+    stream.readLittleEndian(unconst(colors_max));
+    stream.readLittleEndian(speed);
+
+    if (protocolVersion >= 3)
+    {
+        stream.readLittleEndian(unconst(brightness));
+    }
+
+    stream.readLittleEndian(direction);
+    stream.readLittleEndian(unconst(color_mode));
+	//end patch
 	protocol::readArray( stream, colors );
 
 	if (!isValidDirection( direction, flags ))
@@ -584,7 +731,15 @@ size_t Device::calcSize( uint32_t protocolVersion ) const noexcept
 
 void Device::serialize( BinaryOutputStream & stream, uint32_t protocolVersion ) const
 {
-	stream << type;
+	/*Original code
+	stream << type; */
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(type);
+	//end patch
 	protocol::writeString( stream, name );
 	protocol::writeString( stream, vendor );
 	protocol::writeString( stream, description );
@@ -592,8 +747,17 @@ void Device::serialize( BinaryOutputStream & stream, uint32_t protocolVersion ) 
 	protocol::writeString( stream, serial );
 	protocol::writeString( stream, location );
 
+	/* Original code
 	stream << uint16_t( modes.size() );  // the size is not directly before the array, so it must be written manually
-	stream << active_mode;
+	stream << active_mode;*/
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(uint16_t(modes.size()));  // size manually
+    stream.writeLittleEndian(active_mode);
+	//end patch
 	for (const Mode & mode : modes)
 	{
 		mode.serialize( stream, protocolVersion );
@@ -611,7 +775,15 @@ bool Device::deserialize( BinaryInputStream & stream, uint32_t protocolVersion, 
 	// fill in our metadata
 	unconst( idx ) = deviceIdx;
 
-	stream >> unconst( type );
+	/* Original code
+	stream >> unconst( type ); */
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(unconst(type));
+	//end patch
 	protocol::readString( stream, unconst( name ) );
 	protocol::readString( stream, unconst( vendor ) );
 	protocol::readString( stream, unconst( description ) );
@@ -619,9 +791,19 @@ bool Device::deserialize( BinaryInputStream & stream, uint32_t protocolVersion, 
 	protocol::readString( stream, unconst( serial ) );
 	protocol::readString( stream, unconst( location ) );
 
+	/* Original code
 	uint16_t num_modes;
 	stream >> num_modes;  // the size is not directly before the array, so it must be read manually
-	stream >> unconst( active_mode );
+	stream >> unconst( active_mode );*/
+
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	uint16_t num_modes = 0;
+    stream.readLittleEndian(num_modes);  // size manually
+    stream.readLittleEndian(unconst(active_mode));
+	//end patch
 	unconst( modes ).reserve( num_modes );
 	for (uint32_t modeIdx = 0; modeIdx < num_modes; ++modeIdx)
 	{

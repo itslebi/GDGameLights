@@ -78,17 +78,35 @@ static bool isValidMessageType( MessageType type )
 void Header::serialize( BinaryOutputStream & stream ) const
 {
 	stream << magic;
+	/* Original code
 	stream << device_idx;
 	stream << message_type;
-	stream << message_size;
+	stream << message_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(device_idx);
+	stream.writeLittleEndian(message_type);
+	stream.writeLittleEndian(message_size);
+	//end patch
 }
 
 bool Header::deserialize( BinaryInputStream & stream ) noexcept
 {
 	stream >> magic;
+	/* Original code
 	stream >> device_idx;
 	stream >> message_type;
-	stream >> message_size;
+	stream >> message_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(device_idx);
+	stream.readLittleEndian(message_type);
+	stream.readLittleEndian(message_size);
+	//end patch
 
 	if (strncmp( magic, "ORGB", sizeof(magic) ) != 0)
 		stream.setFailed();
@@ -108,12 +126,26 @@ void ReplyControllerCount::serialize( BinaryOutputStream & stream, uint32_t /*pr
 {
 	header.serialize( stream );
 
-	stream << count;
+	/* Original code
+	stream << count;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(count);
+	//end patch
 }
 
 bool ReplyControllerCount::deserializeBody( BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
-	stream >> count;
+	/* Original code
+	stream >> count;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(count);
+	//end patch
 
 	return !stream.failed();
 }
@@ -124,12 +156,26 @@ void RequestControllerData::serialize( own::BinaryOutputStream & stream, uint32_
 {
 	header.serialize( stream );
 
-	stream << protocolVersion;
+	/* Original code
+	stream << protocolVersion;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(protocolVersion);
+	//end patch
 }
 
 bool RequestControllerData::deserializeBody( own::BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
-	stream >> protocolVersion;
+	/* Original code
+	stream >> protocolVersion;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(protocolVersion);
+	//end patch
 
 	return !stream.failed();
 }
@@ -150,13 +196,27 @@ void ReplyControllerData::serialize( BinaryOutputStream & stream, uint32_t proto
 {
 	header.serialize( stream );
 
-	stream << data_size;
+	/* Original code
+	stream << data_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(data_size);
+	//end patch
 	device_desc.serialize( stream, protocolVersion );
 }
 
 bool ReplyControllerData::deserializeBody( BinaryInputStream & stream, uint32_t protocolVersion ) noexcept
 {
-	stream >> data_size;
+	/* Original code
+	stream >> data_size;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(data_size);
+	//end patch
 	device_desc.deserialize( stream, protocolVersion, header.device_idx );
 
 	return !stream.failed();
@@ -168,12 +228,26 @@ void RequestProtocolVersion::serialize( BinaryOutputStream & stream, uint32_t /*
 {
 	header.serialize( stream );
 
-	stream << clientVersion;
+	/* Original code
+	stream << clientVersion;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(clientVersion);
+	//end patch
 }
 
 bool RequestProtocolVersion::deserializeBody( BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
-	stream >> clientVersion;
+	/* Original code
+	stream >> clientVersion;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(clientVersion);
+	//end patch
 
 	return !stream.failed();
 }
@@ -184,12 +258,26 @@ void ReplyProtocolVersion::serialize( BinaryOutputStream & stream, uint32_t /*pr
 {
 	header.serialize( stream );
 
-	stream << serverVersion;
+	/* Original code
+	stream << serverVersion;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.writeLittleEndian(serverVersion);
+	//end patch
 }
 
 bool ReplyProtocolVersion::deserializeBody( BinaryInputStream & stream, uint32_t /*protocolVersion*/ ) noexcept
 {
-	stream >> serverVersion;
+	/* Original code
+	stream >> serverVersion;*/
+	// [GDGameLights Patch] Patch update to use new BinaryStream.hpp
+	// Patch License Info
+	// MIT License
+	// Copyright (c) 2025 itslebi
+	stream.readLittleEndian(serverVersion);
+	//end patch
 
 	return !stream.failed();
 }

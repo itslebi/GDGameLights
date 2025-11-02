@@ -7,7 +7,9 @@
                 "./godot-cpp/gen/**",
                 "./openRGB/**",
                 "./include/**",
-                "./openRGB/external/**"
+                "./openRGB/external/**",
+                "./openRGB/src/**",
+                "./openRGB/include/**"
             ],
             "defines": [
                 "_DEBUG",
