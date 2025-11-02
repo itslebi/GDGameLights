@@ -35,7 +35,7 @@ elif is_linux:
 # --- Include paths ---
 env.Append(CPPPATH=[
     "src/",
-    "src/headers",
+    "include",
     "openRGB",
     "openRGB/include",
     "openRGB/src",

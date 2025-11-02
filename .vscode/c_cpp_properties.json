@@ -5,7 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "./godot-cpp/gen/**",
-                "./openRGB/**"
+                "./openRGB/**",
+                "./include/**",
+                "./openRGB/external/**"
             ],
             "defines": [
                 "_DEBUG",
