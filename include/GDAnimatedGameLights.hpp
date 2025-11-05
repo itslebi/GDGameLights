@@ -3,7 +3,6 @@
 
 #include <godot_cpp/classes/tween.hpp>
 
-
 #include <declarations.hpp>
 #include <GDGameLights.hpp>
 
@@ -12,9 +11,19 @@ namespace godot {
 class GDAnimatedGameLights : public GDGameLights {
     GDCLASS(GDAnimatedGameLights, GDGameLights);
 
+    public:
+        enum AnimationMode {
+            MODE_OFF = 0,
+            MODE_STATIC,
+            MODE_PULSE,
+            MODE_RAINBOW,
+            MODE_CUSTOM
+        };
+
     private:
-        Tween* tween = nullptr;
+        Ref<Tween> tween = nullptr;
         bool animation_running = false;
+        AnimationMode mode = MODE_OFF;
 
     protected:
         static void _bind_methods();
@@ -22,6 +31,9 @@ class GDAnimatedGameLights : public GDGameLights {
     public:
         GDAnimatedGameLights();
         ~GDAnimatedGameLights();
+
+        void set_mode(AnimationMode p_mode) noexcept;
+        AnimationMode get_mode() const noexcept;
 
         void start_animation() noexcept;
         void end_animation() noexcept;
