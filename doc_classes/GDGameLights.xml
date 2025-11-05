@@ -12,20 +12,25 @@
 			<param index="0" name="host" type="String" default="&quot;localhost&quot;" />
 			<param index="1" name="port" type="int" default="6742" />
 			<description>
-			Connect to the openrgb server sdk. The [param host] and [param port] parameters must be the same as the [b]host[/b] and [b]port[/b] on the OpenRGB app.
+				Connect to the openrgb server sdk. The [param host] and [param port] parameters must be the same as the [b]host[/b] and [b]port[/b] on the OpenRGB app.
 			</description>
 		</method>
 		<method name="disconnect">
 			<return type="void" />
 			<description>
-			Disconnect from the OpenRGB server. This function is automatically called when the destructor for [GDGameLights] is called.
+				Disconnect from the OpenRGB server. This function is automatically called when the destructor for [GDGameLights] is called.
 			</description>
 		</method>
 		<method name="set_all_devices_color">
 			<return type="void" />
 			<param index="0" name="color" type="Color" />
 			<description>
-			Set the color of the light of all supported devices to [param color].
+				Set the color of the light of all supported devices to [param color].
+			</description>
+		</method>
+		<method name="set_all_devices_to_direct_mode">
+			<return type="void" />
+			<description>
 			</description>
 		</method>
 	</methods>
