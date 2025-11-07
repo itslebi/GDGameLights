@@ -16,12 +16,11 @@ namespace godot {
 class GDGameLights : public Node {
     GDCLASS(GDGameLights, Node);
 
-    private:
+    protected:
         orgb::Client *client = nullptr;
         bool connected = false;
         bool direct = false;
 
-    protected:
         static void _bind_methods();
 
     public:

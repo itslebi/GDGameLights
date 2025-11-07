@@ -16,6 +16,7 @@ GDAnimatedGameLights::~GDAnimatedGameLights() {
 VARIANT_ENUM_CAST(GDAnimatedGameLights::AnimationMode);
 
 void GDAnimatedGameLights::_bind_methods() {
+    //Bind enum
     BIND_ENUM_CONSTANT(MODE_OFF);
     BIND_ENUM_CONSTANT(MODE_PULSE);
     BIND_ENUM_CONSTANT(MODE_STATIC);
@@ -55,13 +56,28 @@ GDAnimatedGameLights::AnimationMode GDAnimatedGameLights::get_mode() const noexc
 
 
 void GDAnimatedGameLights::start_animation() noexcept {
-    if (!tween.is_valid()) {
+    if (!connected || !client) {
+        gdgamelights::log_error("Tried to start animation without connecting to OpenRGB server!");
+        return;
+    }
+
+    if (!tween->is_valid()) {
         tween = create_tween();
     }
 
-    gdgamelights::log_info("Ran without errors!");
+    if (tween->is_running()) {
+        tween->stop(); //stop current animation
+    }
 }
 
 void GDAnimatedGameLights::end_animation() noexcept {
+    if (!connected || !client) {
+        gdgamelights::log_error("Tried to end animation without connecting to OpenRGB server!");
+        return;
+    }
 
+    if (!tween->is_valid() && !tween->is_running()) {
+        gdgamelights::log_warn("Tried to end animation without starting one.");
+        return;
+    }
 }
