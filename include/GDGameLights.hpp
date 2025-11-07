@@ -28,7 +28,7 @@ class GDGameLights : public Node {
         ~GDGameLights();
 
         //Connect to the openrgb server sdk
-        void connect_to_openrgb(String host = "localhost", int port = 6742) noexcept;
+        void connect_to_openrgb(String host = "127.0.0.1", int port = 6742) noexcept;
 
         //Set the color of the light of all supported devices to color passed
         void set_all_devices_color(Color color) noexcept;

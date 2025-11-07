@@ -11,7 +11,9 @@ GDGameLights::~GDGameLights() {
 // ----------- Bind Methods to be used inside GDScript
 void GDGameLights::_bind_methods() {
     ClassDB::bind_method(D_METHOD("connect_to_openrgb", "host", "port"),
-                         &GDGameLights::connect_to_openrgb, DEFVAL("localhost"), DEFVAL(6742));
+                         &GDGameLights::connect_to_openrgb, 
+                         DEFVAL("127.0.0.1"), 
+                         DEFVAL(6742));
     ClassDB::bind_method(D_METHOD("set_all_devices_color", "color"),
                          &GDGameLights::set_all_devices_color);
     ClassDB::bind_method(D_METHOD("set_all_devices_to_direct_mode"),
