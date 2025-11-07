@@ -81,6 +81,11 @@ void GDGameLights::set_all_devices_to_direct_mode() noexcept {
         return;
     }
 
+    if (direct) {
+        gdgamelights::log_info("Already on direct mode.");
+        return;
+    }
+
     orgb::DeviceListResult deviceList = client->requestDeviceList();
 
     if (deviceList.status != orgb::RequestStatus::Success) {
@@ -122,6 +127,8 @@ void GDGameLights::set_all_devices_to_direct_mode() noexcept {
             gdgamelights::log_info("Device " + String(device.name.c_str()) + " mode set to" + String(modeToUse->name.c_str()));
         }
     }
+
+    direct = true;
 }
 
 

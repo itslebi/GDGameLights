@@ -12,10 +12,33 @@
 			<description>
 			</description>
 		</method>
+		<method name="get_mode" qualifiers="const">
+			<return type="int" enum="GDAnimatedGameLights.AnimationMode" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mode">
+			<return type="void" />
+			<param index="0" name="p_mode" type="int" enum="GDAnimatedGameLights.AnimationMode" />
+			<description>
+			</description>
+		</method>
 		<method name="start_animation">
 			<return type="void" />
 			<description>
 			</description>
 		</method>
 	</methods>
+	<constants>
+		<constant name="MODE_OFF" value="0" enum="AnimationMode">
+		</constant>
+		<constant name="MODE_PULSE" value="2" enum="AnimationMode">
+		</constant>
+		<constant name="MODE_STATIC" value="1" enum="AnimationMode">
+		</constant>
+		<constant name="MODE_RAINBOW" value="3" enum="AnimationMode">
+		</constant>
+		<constant name="MODE_CUSTOM" value="4" enum="AnimationMode">
+		</constant>
+	</constants>
 </class>

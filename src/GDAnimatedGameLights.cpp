@@ -25,6 +25,17 @@ void GDAnimatedGameLights::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_mode", "p_mode"), &GDAnimatedGameLights::set_mode);
     ClassDB::bind_method(D_METHOD("get_mode"), &GDAnimatedGameLights::get_mode);
 
+    ADD_PROPERTY(
+        PropertyInfo(
+            Variant::INT,
+            "mode",
+            PROPERTY_HINT_ENUM,
+            "Off,Static,Pulse,Rainbow,Custom"
+        ),
+        "set_mode",
+        "get_mode"
+    );
+
     //Methods
     ClassDB::bind_method(D_METHOD("start_animation"),
                          &GDAnimatedGameLights::start_animation);
@@ -45,7 +56,7 @@ GDAnimatedGameLights::AnimationMode GDAnimatedGameLights::get_mode() const noexc
 
 void GDAnimatedGameLights::start_animation() noexcept {
     if (!tween.is_valid()) {
-        tween.instantiate();
+        tween = create_tween();
     }
 
     gdgamelights::log_info("Ran without errors!");

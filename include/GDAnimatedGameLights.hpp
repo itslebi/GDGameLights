@@ -13,7 +13,7 @@ class GDAnimatedGameLights : public GDGameLights {
 
     public:
         enum AnimationMode {
-            MODE_OFF = 0,
+            MODE_OFF,
             MODE_STATIC,
             MODE_PULSE,
             MODE_RAINBOW,
@@ -22,8 +22,7 @@ class GDAnimatedGameLights : public GDGameLights {
 
     private:
         Ref<Tween> tween = nullptr;
-        bool animation_running = false;
-        AnimationMode mode = MODE_OFF;
+        bool animation_running = false; //use tween.is_running?
 
     protected:
         static void _bind_methods();
@@ -31,6 +30,8 @@ class GDAnimatedGameLights : public GDGameLights {
     public:
         GDAnimatedGameLights();
         ~GDAnimatedGameLights();
+
+        AnimationMode mode = MODE_OFF;
 
         void set_mode(AnimationMode p_mode) noexcept;
         AnimationMode get_mode() const noexcept;

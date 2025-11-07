@@ -2,6 +2,7 @@
 #define GD_GAMELIGHTS_HPP
 
 #include <godot_cpp/classes/ref_counted.hpp>
+#include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/color.hpp>
 
@@ -12,12 +13,13 @@
 
 namespace godot {
 
-class GDGameLights : public RefCounted {
-    GDCLASS(GDGameLights, RefCounted);
+class GDGameLights : public Node {
+    GDCLASS(GDGameLights, Node);
 
     private:
         orgb::Client *client = nullptr;
         bool connected = false;
+        bool direct = false;
 
     protected:
         static void _bind_methods();
