@@ -12,7 +12,7 @@ func _ready() -> void:
 	lights.connect_to_openrgb()
 	lights.set_all_devices_to_direct_mode()
 	lights.set_all_devices_color(Color(1, 1, 0))
-	lights.mode = GDAnimatedGameLights.MODE_PULSE
+	lights.mode = GDAnimatedGameLights.MODE_STATIC
 	lights.start_animation()
 
 func _on_button_pressed() -> void:
