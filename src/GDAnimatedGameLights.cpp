@@ -96,7 +96,6 @@ bool GDAnimatedGameLights::set_mode_static(float duration, Color color) noexcept
         tween = create_tween();
     }
 
-
     set_color_intensity(1.0, color);
 
     tween->tween_interval(duration);

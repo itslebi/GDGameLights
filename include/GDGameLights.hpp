@@ -10,6 +10,7 @@
 #include <include/OpenRGB/DeviceInfo.hpp>
 
 #include <declarations.hpp>
+#include <helpers.hpp>
 
 namespace godot {
 

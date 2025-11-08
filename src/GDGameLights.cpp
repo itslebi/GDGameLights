@@ -29,6 +29,11 @@ void GDGameLights::connect_to_openrgb(String host, int port) noexcept {
         return;
     }
 
+    if (!gdgamelights::isValidIPv4(host.utf8().get_data())) {
+        gdgamelights::log_error("Tried connecting to invalid port");
+        return;
+    }
+
     gdgamelights::log_info("Connecting to OpenRGB at host: " + host + ", port: " + String::num_int64(port));
 
     client = memnew(orgb::Client());
