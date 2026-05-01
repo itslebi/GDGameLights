@@ -1,5 +1,6 @@
 import sys
 
+# --- Default target ---
 if not ARGUMENTS.get("target"):
     ARGUMENTS["target"] = "template_debug"
 
@@ -10,7 +11,8 @@ if ARGUMENTS["target"] == "template_debug":
     env.Append(CPPDEFINES=['IN_EDITOR'])
 
 # --- Compiler-specific flags ---
-if env["CC"] == "cl" or env["CXX"] == "cl":
+# Works with all compilers, MSVC included
+if env['CC'].lower().endswith("cl") or env['CXX'].lower().endswith("cl"):
     env.Append(CXXFLAGS=["/EHsc"])  # enable exceptions for MSVC
 else:
     env.Append(CXXFLAGS=["-std=c++20"])  # GCC/Clang standard
