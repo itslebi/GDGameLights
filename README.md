@@ -5,8 +5,6 @@ This project integrates **OpenRGB** into a Godot GDExtension to enable direct co
 
 Several patches where made to openRGB. Files [ProtocolCommon.hpp](openRGB/src/ProtocolCommon.hpp), [DeviceInfo.cpp](openRGB/src/DeviceInfo.cpp), [ProtocolMessages.cpp](openRGB/src/ProtocolMessages.cpp) and [NetAddress.cpp](openRGB/external/CppUtils-Network/NetAddress.cpp) where updated to use the new [BinaryStream.hpp](openRGB/external/CppUtils-Essential/BinaryStream.hpp) from the extarnal libraries required. Patches are identified with comments.
 
-Got it — here is **GDGamepadLights rewritten in the exact same structure and style as your GDDraco example, with no deviations**:
-
 ---
 
 ## Index
