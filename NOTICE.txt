@@ -1,0 +1,16 @@
+GDDraco
+
+Copyright (c) 2025 itslebi
+
+This software is licensed under the MIT License.
+See the LICENSE file for details.
+
+---
+
+Third-Party Components:
+
+1. OpenRGB C++ SDK
+   - URL: https://github.com/Youda008/OpenRGB-cppSDK/tree/d2e40fa089d2e5160c1220b51bab62b35b61d4a5
+   - License: MIT License
+   - License URL: https://github.com/Youda008/OpenRGB-cppSDK/blob/d2e40fa089d2e5160c1220b51bab62b35b61d4a5/LICENSE
+   - Note OpenRGB C++ SDK is dependant on CppUtils-Essential, https://github.com/Youda008/CppUtils-Essential/commit/691850a7c5274870f839b69017896190f4287231, and CppUtils-Network, https://github.com/Youda008/CppUtils-Network/tree/12fa22ef505c76e36174f1854cfa495cb9770247. Some patches were applied to these libraries.
