@@ -1,6 +1,6 @@
 extends Control
 
-var lights = GDAnimatedGameLights.new()
+var lights = GDGameLights.new()
 var pulsing: bool = false
 var tween: Tween = null
 var blue_intensity: float = 0.0
@@ -12,8 +12,6 @@ func _ready() -> void:
 	lights.connect_to_openrgb()
 	lights.set_all_devices_to_direct_mode()
 	lights.set_all_devices_color(Color(1, 1, 0))
-	lights.mode = GDAnimatedGameLights.MODE_STATIC
-	lights.start_animation()
 
 func _on_button_pressed() -> void:
 	pulsing = false
@@ -21,6 +19,7 @@ func _on_button_pressed() -> void:
 	if tween:
 		tween.kill()
 		tween = null
+	blue_intensity = 0.0
 	lights.set_all_devices_color(Color(1, 0, 0))
 
 func _on_button_2_pressed() -> void:

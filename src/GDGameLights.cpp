@@ -106,19 +106,22 @@ void GDGameLights::set_all_devices_to_direct_mode() noexcept {
             continue;
         }
 
-        orgb::Mode *modeToUse = nullptr;
-        orgb::Mode *fallbackMode = nullptr;
+        const orgb::Mode *modeToUse = nullptr;
+        const orgb::Mode *fallbackMode = nullptr;
 
         // Find the mode
-        for (auto &mode : device.modes) {
-            if (mode.name == "Direct") {
-                orgb::Mode modeCopy = mode;
-                modeToUse = &modeCopy;
+        for (const auto &mode : device.modes) {
+            // Look at the OpenRGB SDK headers for the flag definition (usually MODE_FLAG_HAS_SPEED)
+            // Assuming standard OpenRGB SDK bitwise rules:
+            bool has_speed = (mode.flags & (1 << 0)); // Or the exact SDK enum for HasSpeed
+
+            if (mode.name == "Direct" || (mode.color_mode == orgb::ColorMode::PerLed && !has_speed)) { 
+                // Some devices do not have the correct name mapping for direct mode!
+                modeToUse = &mode;
                 break;
             }
             if (!fallbackMode && mode.name != "Off") {
-                orgb::Mode modeCopy = mode;
-                fallbackMode = &modeCopy;
+                fallbackMode = &mode;
             }
         }
 
@@ -131,14 +134,12 @@ void GDGameLights::set_all_devices_to_direct_mode() noexcept {
         if (status != orgb::RequestStatus::Success) {
             gdgamelights::log_error("Failed to set mode for device: " + String(device.name.c_str()));
         } else {
-            gdgamelights::log_info("Device " + String(device.name.c_str()) + " mode set to" + String(modeToUse->name.c_str()));
+            gdgamelights::log_info("Device " + String(device.name.c_str()) + " mode set to " + String(modeToUse->name.c_str()));
         }
     }
 
     direct = true;
 }
-
-
 
 void GDGameLights::disconnect() noexcept {
     if (client) {
