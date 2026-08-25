@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b5pc4vm0cpg8"]
+
+[ext_resource type="Script" uid="uid://dfshbt54bxvae" path="res://keyboard_lights.gd" id="1_fxbfq"]
+
+[node name="KeyboardLights" type="Control" unique_id=133539568]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fxbfq")
+
+[node name="GDKeyboardGameLights" type="GDKeyboardGameLights" parent="." unique_id=1872197898]

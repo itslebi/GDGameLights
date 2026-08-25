@@ -151,5 +151,6 @@ void GDGameLights::disconnect() noexcept {
         memdelete(client);
         client = nullptr;
         connected = false;
+        direct = false;
     }
 }

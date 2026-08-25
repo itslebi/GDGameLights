@@ -29,16 +29,16 @@ class GDGameLights : public Node {
         ~GDGameLights();
 
         //Connect to the openrgb server sdk
-        void connect_to_openrgb(String host = "127.0.0.1", int port = 6742) noexcept;
+        virtual void connect_to_openrgb(String host = "127.0.0.1", int port = 6742) noexcept;
 
-        //Set the color of the light of all supported devices to color passed
+        // Set the color of the light of all supported devices to color passed
         void set_all_devices_color(Color color) noexcept;
 
-        //Set the mode of all supported devices to color passed
-        void set_all_devices_to_direct_mode() noexcept;
+        // Set the mode of all supported devices to color passed
+        virtual void set_all_devices_to_direct_mode() noexcept;
 
         //Disconnect from the openrgb server sdk
-        void disconnect() noexcept;
+        virtual void disconnect() noexcept;
     };
 } //namespace godot
 

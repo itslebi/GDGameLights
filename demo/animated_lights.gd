@@ -1,12 +1,11 @@
 extends Control
 
 
-var lights = GDAnimatedGameLights.new()
+@onready var lights = $GDGameAnimatedLights
 @onready var colorPicker: ColorPicker = $ColorPicker
 @onready var current_color: Color = colorPicker.color
 
 func _ready() -> void:
-	add_child(lights)
 	lights.connect_to_openrgb()
 	lights.set_all_devices_to_direct_mode() 
 

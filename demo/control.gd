@@ -1,14 +1,14 @@
 extends Control
 
-var lights = GDGameLights.new()
+
 var pulsing: bool = false
 var tween: Tween = null
 var blue_intensity: float = 0.0
 
+@onready var lights: GDGameLights = $GDGameLights
 @onready var btn_2 : BaseButton = $Button2
 
 func _ready() -> void:
-	add_child(lights)
 	lights.connect_to_openrgb()
 	lights.set_all_devices_to_direct_mode()
 	lights.set_all_devices_color(Color(1, 1, 0))

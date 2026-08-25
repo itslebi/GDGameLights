@@ -27,7 +27,7 @@ void GDAnimatedGameLights::_bind_methods() {
                          &GDAnimatedGameLights::set_mode);
     ClassDB::bind_method(D_METHOD("get_mode"), 
                          &GDAnimatedGameLights::get_mode);
-
+		
     ADD_PROPERTY(
         PropertyInfo(
             Variant::INT,
@@ -88,6 +88,7 @@ bool GDAnimatedGameLights::set_mode_pulse(float duration, Color color) noexcept 
 }
 
 bool GDAnimatedGameLights::set_mode_rainbow() noexcept {
+    gdgamelights::log_warn("This mode is currently not working due to missing development.");
     return true;
 }
 
@@ -142,6 +143,7 @@ void GDAnimatedGameLights::start_animation(float duration, Color color) noexcept
             break;
         case MODE_CUSTOM:
             //Nothing to do
+            gdgamelights::log_warn("This mode is not fully developed.");
             break;
         default:
             gdgamelights::log_error("Unsuported mode.");

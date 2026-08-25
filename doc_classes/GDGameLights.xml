@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="GDGameLights" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+	Control device lights using OpenRGB.
 	</brief_description>
 	<description>
+	This node allows for the utilization of the OpenRGB SDK to control supported lights. If offers some basic functions to modify the state of the lights.
 	</description>
 	<tutorials>
+	Demo code is available at the official github repo.
 	</tutorials>
 	<methods>
 		<method name="connect_to_openrgb">

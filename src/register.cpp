@@ -1,6 +1,7 @@
 #include "register.hpp"
 #include "GDGameLights.hpp"
 #include "GDAnimatedGameLights.hpp"
+#include "GDKeyboardGameLights.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -19,6 +20,7 @@ void initialize(ModuleInitializationLevel p_level) {
 
     GDREGISTER_CLASS(GDGameLights);
     GDREGISTER_CLASS(GDAnimatedGameLights);
+    GDREGISTER_CLASS(GDKeyboardGameLights);
 }
 
 void uninitialize(ModuleInitializationLevel p_level) {

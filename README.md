@@ -39,7 +39,7 @@ Several patches where made to openRGB. Files [ProtocolCommon.hpp](openRGB/src/Pr
 ### Prerequisites
 
 - **[Godot 4.5](https://godotengine.org/)**  
-  _⚠️ This extension was tested with **Godot 4.5**. It may work with other 4.x versions, but compatibility is not guaranteed._
+  _⚠️ This extension was tested with **Godot 4.5** and **Godot 4.6**. It may work with other 4.x versions, but compatibility is not guaranteed._
 
 ### 1. Download the Latest Release
 You can find the latest release for Windows and Linux in [Releases](https://github.com/itslebi/GDGamepadLights/releases).  
@@ -82,7 +82,7 @@ _⚠️ OpenRGB SDK and CppUtils dependencies are included in modified form. Ori
 ```bash
 git clone https://github.com/itslebi/GDGamepadLights
 cd GDGamepadLights
-````
+```
 
 ### 2. Building
 
@@ -105,7 +105,10 @@ env.Append(CPPDEFINES=[('critical_error', 'CRITICAL_ERROR')])
 
 This ensures compatibility with legacy `CppUtils-Essential` calls.
 
----
+> Note: To build the documentation files use:   
+> ```bash scons target=editor ```
+> This will build our xml files into documention inside the editor.
+
 
 ### 3. Testing
 
@@ -116,6 +119,12 @@ Use the included demo project:
 * Open the project in Godot
 * Ensure OpenRGB is running with SDK enabled
 * Test device lighting control via supported gamepads
+
+---
+
+## Common Mistakes
+- **Dev build crashes with ```access denied```**: This likely means you ran a scene or your game and forgot to stop running the game. Your Godot editor can be open during builds.
+- **Animation is not working on supported device**: For the animations from ```GDAnimatedGameLights``` to work you must have the node added to the scene tree because tween requires it. This means that if you manually create the node using code ```var lights = GDAnimatedGameLights.new()``` you must call ```addchild(lights)``` before using it.
 
 ---
 
