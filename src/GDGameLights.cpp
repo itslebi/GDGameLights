@@ -51,19 +51,22 @@ void GDGameLights::connect_to_openrgb(String host, int port) noexcept {
     gdgamelights::log_info("Connected to OpenRGB server at " + host + ":" + String::num_int64(port));
 }
 
+orgb::Color GDGameLights::convert_color(Color color) const noexcept {
+    orgb::Color col{
+        static_cast<uint8_t>(color.r * 255),
+        static_cast<uint8_t>(color.g * 255),
+        static_cast<uint8_t>(color.b * 255)
+    };
+    return col;
+}
+
 void GDGameLights::set_all_devices_color(Color color) noexcept {
     if (!connected || !client) {
         gdgamelights::log_error("Not connected to OpenRGB server!");
         return;
     }
 
-    // Convert Godot Color (0.0–1.0 range) to 8-bit RGB
-    orgb::Color col{
-        static_cast<uint8_t>(color.r * 255),
-        static_cast<uint8_t>(color.g * 255),
-        static_cast<uint8_t>(color.b * 255)
-    };
-
+    orgb::Color col = convert_color(color);
     orgb::DeviceListResult deviceList = client->requestDeviceList();
 
     if (deviceList.status != orgb::RequestStatus::Success) {

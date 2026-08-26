@@ -24,6 +24,9 @@ class GDGameLights : public Node {
 
         static void _bind_methods();
 
+        // Helper to convert Godot color (0.0–1.0 range) to ORGB color object (8-bit RGB)
+        orgb::Color convert_color(Color color) const noexcept;
+
     public:
         GDGameLights();
         ~GDGameLights();

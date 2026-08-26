@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="GDGameLights" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="GDGameLights" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-	Control device lights using OpenRGB.
+		Control device lights using OpenRGB.
 	</brief_description>
 	<description>
-	This node allows for the utilization of the OpenRGB SDK to control supported lights. If offers some basic functions to modify the state of the lights.
+		This node allows for the utilization of the OpenRGB SDK to control supported lights. If offers some basic functions to modify the state of the lights.
 	</description>
 	<tutorials>
-	Demo code is available at the official github repo.
 	</tutorials>
 	<methods>
 		<method name="connect_to_openrgb">
 			<return type="void" />
-			<param index="0" name="host" type="String" default="&quot;localhost&quot;" />
+			<param index="0" name="host" type="String" default="&quot;127.0.0.1&quot;" />
 			<param index="1" name="port" type="int" default="6742" />
 			<description>
 				Connect to the openrgb server sdk. The [param host] and [param port] parameters must be the same as the [b]host[/b] and [b]port[/b] on the OpenRGB app.

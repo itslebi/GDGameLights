@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="GDAnimatedGameLights" inherits="GDGameLights" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-	Base for animating custom lighting using OpenRGB.
+		Base for animating custom lighting using OpenRGB.
 	</brief_description>
 	<description>
-	This node defines a base architecture for easier creation of animations using GDScript.
+		This node defines a base architecture for easier creation of animations using GDScript.
 	</description>
 	<tutorials>
-	Demo code is available at the official github repo.
 	</tutorials>
 	<methods>
 		<method name="end_animation">
@@ -15,23 +14,25 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_mode" qualifiers="const">
-			<return type="int" enum="GDAnimatedGameLights.AnimationMode" />
-			<description>
-			</description>
-		</method>
-		<method name="set_mode">
+		<method name="set_color_intensity">
 			<return type="void" />
-			<param index="0" name="p_mode" type="int" enum="GDAnimatedGameLights.AnimationMode" />
+			<param index="0" name="intensity" type="float" />
+			<param index="1" name="target_color" type="Color" />
 			<description>
 			</description>
 		</method>
 		<method name="start_animation">
 			<return type="void" />
+			<param index="0" name="duration" type="float" default="1.0" />
+			<param index="1" name="color" type="Color" default="Color(0, 0, 1, 1)" />
 			<description>
 			</description>
 		</method>
 	</methods>
+	<members>
+		<member name="mode" type="int" setter="set_mode" getter="get_mode" enum="GDAnimatedGameLights.AnimationMode" default="0">
+		</member>
+	</members>
 	<constants>
 		<constant name="MODE_OFF" value="0" enum="AnimationMode">
 		</constant>

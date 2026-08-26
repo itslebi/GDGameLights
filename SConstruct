@@ -61,6 +61,44 @@ sources = (
     Glob("openRGB/external/CppUtils-Network/*.cpp")
 )
 
+# =========================================================================
+# Cleaning Obj files
+# =========================================================================
+Alias('clean-editor', [])
+
+if 'clean-editor' in COMMAND_LINE_TARGETS:
+    import os
+    print("scons: Purging local editor object files strictly from sources...")
+    
+    # Resolve .cpp sources into .obj nodes
+    obj_ext = ".obj" if is_windows else ".o"
+
+    real_source_paths = [str(f) for f in sources]
+
+    # Get folders
+    source_dirs = set()
+    for src_file in sources:
+        dir_name = os.path.dirname(str(src_file))
+        if dir_name: # Keep only valid paths
+            source_dirs.add(dir_name)
+    
+    # Remove only obj files matching "editor"
+    for folder in source_dirs:
+        if os.path.exists(folder):
+            for file_name in os.listdir(folder):
+                if "editor" in file_name and file_name.endswith(obj_ext):
+                    full_path = os.path.join(folder, file_name)
+                    if os.path.exists(full_path):
+                        try:
+                            os.remove(full_path)
+                            print(f"Removed editor object: {full_path}")
+                        except OSError as e:
+                            print(f"Error deleting {full_path}: {e}")
+                    
+    # Exit so it doesn't trigger build sequence
+    Exit(0)
+#==============================================================================
+
 # --- Documentation
 if env["target"] in ["editor", "template_debug"]:
     try:

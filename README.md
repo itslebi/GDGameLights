@@ -105,10 +105,32 @@ env.Append(CPPDEFINES=[('critical_error', 'CRITICAL_ERROR')])
 
 This ensures compatibility with legacy `CppUtils-Essential` calls.
 
-> Note: To build the documentation files use:   
-> ```bash scons target=editor ```
-> This will build our xml files into documention inside the editor.
+#### Building Documentation files
+To build the documentation files you need to use one of the following commands depending on your OS, inside the ```demo``` folder.
 
+- **Windows**:
+```powershell
+& "C:\Path\To\Your\Godot\godot.exe" --doctool ../ --gdextension-docs
+```
+
+```cmd
+"C:\Path\To\Your\Godot\godot.exe" --doctool ../ --gdextension-docs
+```
+
+- **MacOS**:
+```shell
+/Applications/Godot.app/Contents/MacOS/Godot --doctool ../ --gdextension-docs
+```
+
+- **Linux**:
+```bash
+/path/to/Godot_v4.x-stable_linux.x86_64 --doctool ../ --gdextension-docs
+```
+
+- **Windows Using Steam**:
+```powershell
+& "C:\Program Files (x86)\Steam\steamapps\common\Godot Engine\godot.exe" --doctool ../ --gdextension-docs
+```
 
 ### 3. Testing
 

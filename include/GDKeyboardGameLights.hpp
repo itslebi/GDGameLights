@@ -29,12 +29,15 @@ class GDKeyboardGameLights : public GDGameLights {
         };
 
         const orgb::Device *keyboard = nullptr; // The current keybpard found
-        int index_map[TOTAL_KEYS]; // Fast hardware index lookup table
+        int key_map[TOTAL_KEYS]; // Store which keys exist in this keyboard (some keyboards do not have num lock etc.)
         bool is_keyboard_found = false; // Helper var set to true if there is a valid pointer in keyboard variable
 
     private:
         // Internal function to convert our handy enum for godot editor to the real string names used by ORGB SDK
-        String getOpenRGBKeyString(UniversalKey key) const noexcept;
+        std::string getOpenRGBKeyString(UniversalKey key) const noexcept;
+
+        // Internal helper function to setup the keyboard mapping
+        void setup_keyboard() noexcept;
 
     protected:
         static void _bind_methods();
@@ -51,6 +54,10 @@ class GDKeyboardGameLights : public GDGameLights {
 
         // Set keyboard to direct mode
         void set_all_devices_to_direct_mode() noexcept override;
+
+        // Set the color of keys
+        void set_key_color_bulk(Color color, const TypedArray<UniversalKey> &keys) const noexcept;
+        void set_key_color(Color color, const UniversalKey &key) const noexcept;
     };
 } //namespace godot
 

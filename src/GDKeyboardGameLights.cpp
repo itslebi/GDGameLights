@@ -20,11 +20,25 @@ void GDKeyboardGameLights::_bind_methods() {
     BIND_ENUM_CONSTANT(KEY_F3);
 
     //Methods
-    ClassDB::bind_method(D_METHOD("getOpenRGBKeyString", "key"),
-                         &GDKeyboardGameLights::getOpenRGBKeyString);
+    ClassDB::bind_method(D_METHOD("set_key_color", "color", "key"),
+                         &GDKeyboardGameLights::set_key_color);
+    ClassDB::bind_method(D_METHOD("set_key_color_bulk", "color", "keys"),
+                         &GDKeyboardGameLights::set_key_color_bulk);
 }
 
 // ----------- Methods
+void GDKeyboardGameLights::set_key_color_bulk(Color color, const TypedArray<UniversalKey> &keys) const noexcept {
+    std::vector<orgb::Color> frame_buffer = keyboard->colors;
+    orgb::Color col = convert_color(color);
+    for (const Variant &key : keys) {
+        //
+    }
+}
+
+void GDKeyboardGameLights::set_key_color(Color color, const UniversalKey &key) const noexcept {
+    //
+}
+
 void GDKeyboardGameLights::connect_to_openrgb(String host, int port) noexcept {
     GDGameLights::connect_to_openrgb(host, port);
     if (connected) {
@@ -35,9 +49,28 @@ void GDKeyboardGameLights::connect_to_openrgb(String host, int port) noexcept {
             if (this->keyboard == nullptr) {
                 gdgamelights::log_error("Failed to find valid keyboard.");
             }
-            is_keyboard_found = true;
+            setup_keyboard();
         }
     }
+}
+
+void GDKeyboardGameLights::setup_keyboard() noexcept {
+    // Prefil key_map with -1 -> no keys exist
+    std::fill(key_map, key_map + TOTAL_KEYS, -1);
+
+    // Cross-reference OpenRGB's live memory strings with your app's enum keys
+    for (int e = 0; e < TOTAL_KEYS; e++) {
+        std::string target_string = getOpenRGBKeyString((UniversalKey)e);
+        
+        for (size_t hardware_idx = 0; hardware_idx < keyboard->leds.size(); hardware_idx++) {
+            if (keyboard->leds[hardware_idx].name == target_string) {
+                key_map[e] = (int)hardware_idx; // Saved!
+                break;
+            }
+        }
+    }
+
+    is_keyboard_found = true;
 }
 
 void GDKeyboardGameLights::disconnect() noexcept {
@@ -46,6 +79,7 @@ void GDKeyboardGameLights::disconnect() noexcept {
     if (!client) {
         is_keyboard_found = false;
         keyboard = nullptr;
+        std::fill(key_map, key_map + TOTAL_KEYS, -1);
     }
 }
 
@@ -105,7 +139,7 @@ void GDKeyboardGameLights::set_all_devices_to_direct_mode() noexcept {
 
 }
 
-String GDKeyboardGameLights::getOpenRGBKeyString(UniversalKey key) const noexcept {
+std::string GDKeyboardGameLights::getOpenRGBKeyString(UniversalKey key) const noexcept {
     switch (key) {
         case KEY_ESC: return "Key: Escape";
         case KEY_TILDE: return "Key: `";
@@ -141,18 +175,14 @@ String GDKeyboardGameLights::getOpenRGBKeyString(UniversalKey key) const noexcep
         
         // Single characters/numbers default directly to OpenRGB standard formatting "Key: X"
         default: {
-            if (key >= KEY_F1 && key <= KEY_F12) {
-                return ("Key: F" + std::to_string(key - KEY_F1 + 1)).c_str();
-            }
-            if (key >= KEY_1 && key <= KEY_9) {
-                return ("Key: " + std::to_string(key - KEY_1 + 1)).c_str();
-            }
+            if (key >= KEY_F1 && key <= KEY_F12) return "Key: F" + std::to_string(key - KEY_F1 + 1);
+            if (key >= KEY_1 && key <= KEY_9) return "Key: " + std::to_string(key - KEY_1 + 1);
             if (key == KEY_0) return "Key: 0";
             
             // Handle letters A-Z mapping
-            if (key >= KEY_Q && key <= KEY_P) return (std::string("Key: ") + (char)('Q' + (key - KEY_Q))).c_str();
-            if (key >= KEY_A && key <= KEY_L) return (std::string("Key: ") + (char)('A' + (key - KEY_A))).c_str();
-            if (key >= KEY_Z && key <= KEY_M) return (std::string("Key: ") + (char)('Z' + (key - KEY_Z))).c_str();
+            if (key >= KEY_Q && key <= KEY_P) return std::string("Key: ") + (char)('Q' + (key - KEY_Q));
+            if (key >= KEY_A && key <= KEY_L) return std::string("Key: ") + (char)('A' + (key - KEY_A));
+            if (key >= KEY_Z && key <= KEY_M) return std::string("Key: ") + (char)('Z' + (key - KEY_Z));
             
             return "Unknown";
         }
