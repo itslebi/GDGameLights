@@ -422,6 +422,26 @@ RequestStatus Client::_setDeviceColor( const Device & device, Color color )
 	return RequestStatus::Success;
 }
 
+RequestStatus Client::_setLEDColorBulk(const Device & device, const std::vector<Color> & colors) {
+    if (!_socket->isConnected())
+    {
+        return RequestStatus::NotConnected;
+    }
+
+    if (colors.size() != device.leds.size())
+    {
+        return RequestStatus::SendRequestFailed;
+    }
+
+    if (!sendMessage<UpdateLEDs>(device.idx, colors))
+    {
+        return RequestStatus::SendRequestFailed;
+    }
+
+    return RequestStatus::Success;
+}
+
+
 RequestStatus Client::_setZoneColor( const Zone & zone, Color color )
 {
 	if (!_socket->isConnected())
@@ -658,6 +678,15 @@ RequestStatus Client::setDeviceColor( const Device & device, Color color ) noexc
 	} CATCH_ALL (
 		return RequestStatus::UnexpectedError;
 	)
+}
+
+RequestStatus Client::setLEDColorBulk(const Device & device, const std::vector<Color> & colors) noexcept {
+    try {
+        return _setLEDColorBulk(device, colors);
+    }
+    CATCH_ALL (
+        return RequestStatus::UnexpectedError;
+    )
 }
 
 RequestStatus Client::setZoneColor( const Zone & zone, Color color ) noexcept

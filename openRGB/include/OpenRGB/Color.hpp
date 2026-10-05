@@ -37,7 +37,7 @@ class Color
 	uint8_t padding;
 
 	Color() noexcept = default;
-	Color( uint8_t red, uint8_t green, uint8_t blue ) noexcept : r( red ), g( green ), b( blue ) {}
+	Color( uint8_t red, uint8_t green, uint8_t blue ) noexcept : r( red ), g( green ), b( blue ), padding(0) {}
 
 	/// Attempts to deduce a color from a string description.
 	/** Possible ways to define a color are:

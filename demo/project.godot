@@ -18,3 +18,10 @@ config/name="Demo_GameLights"
 run/main_scene="uid://cmwtbvjhxl7ab"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[input]
+
+test={
+"deadzone": 0.2,
+"events": []
+}

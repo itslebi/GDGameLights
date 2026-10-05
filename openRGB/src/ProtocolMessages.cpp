@@ -453,8 +453,13 @@ void UpdateSingleLED::serialize( BinaryOutputStream & stream, uint32_t /*protoco
 	// Patch License Info
 	// MIT License
 	// Copyright (c) 2025 itslebi
+	//stream.writeLittleEndian(led_idx);
+    //stream.writeRaw(color);
 	stream.writeLittleEndian(led_idx);
-    stream.writeRaw(color);
+    stream.put(color.r);
+    stream.put(color.g);
+    stream.put(color.b);
+    stream.put(color.padding);
 	//end patch
 }
 

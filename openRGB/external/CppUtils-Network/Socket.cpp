@@ -407,6 +407,11 @@ SocketError TcpSocket::send( const_byte_span buffer ) noexcept
 			_lastSystemError = getLastError();
 			return SocketError::SendFailed;
 		}
+
+		if (sent == 0) {
+        	return SocketError::SendFailed;
+    	}
+
 		sendBegin += sent;
 		sendSize -= size_t( sent );
 	}

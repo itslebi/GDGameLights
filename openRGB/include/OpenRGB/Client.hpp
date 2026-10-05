@@ -176,6 +176,8 @@ class Client
 	/// Resizes a zone of leds, if the device supports it.
 	RequestStatus setZoneSize( const Zone & zone, uint32_t newSize ) noexcept;
 
+	RequestStatus setLEDColorBulk(const Device & device, const std::vector<Color> & colors) noexcept;
+
 	/// Sets a color of a single selected LED.
 	RequestStatus setLEDColor( const LED & led, Color color ) noexcept;
 
@@ -322,6 +324,7 @@ class Client
 	RequestStatus _changeMode( const Device & device, const Mode & mode );
 	RequestStatus _saveMode( const Device & device, const Mode & mode );
 	RequestStatus _setDeviceColor( const Device & device, Color color );
+	RequestStatus _setLEDColorBulk(const Device & device, const std::vector<Color> & colors);
 	RequestStatus _setZoneColor( const Zone & zone, Color color );
 	RequestStatus _setZoneSize( const Zone & zone, uint32_t newSize );
 	RequestStatus _setLEDColor( const LED & led, Color color );
